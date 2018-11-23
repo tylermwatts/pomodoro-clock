@@ -171,7 +171,16 @@ class PomodoroClock extends React.Component {
 
   render() {
     return (
-      <div id="main" className="container">
+      <div
+        id="main"
+        className={
+          !this.state.onBreak
+            ? !this.state.running
+              ? "container"
+              : "container session-time"
+            : "container break-time"
+        }
+      >
         <span id="break-session-row" className="row">
           <div id="break-display">
             <p id="break-label">Break Length</p>
