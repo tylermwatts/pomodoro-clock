@@ -9,24 +9,136 @@ class PomodoroClock extends React.Component {
     this.state = {
       breakLength: 5,
       sessionLength: 25,
-      running: false
+      running: false,
+      currSeshMins: 0,
+      currSeshSecs: 0,
+      currBreakMins: 0,
+      currBreakSecs: 0,
+      intervalID: 0,
+      resumeTimer: false,
+      onBreak: false
     };
-    this.getStartTime = this.getStartTime.bind(this);
+    this.startTimer = this.startTimer.bind(this);
     this.resetClock = this.resetClock.bind(this);
-    this.toggleTimer = this.toggleTimer.bind(this);
+    this.stopTimer = this.stopTimer.bind(this);
     this.adjustLength = this.adjustLength.bind(this);
+    this.countDown = this.countDown.bind(this);
+    this.toggleTimer = this.toggleTimer.bind(this);
+    this.breakCountDown = this.breakCountDown.bind(this);
+    this.startBreakTimer = this.startBreakTimer.bind(this);
   }
 
-  getStartTime() {
-    return this.state.sessionLength.toString() + ":00";
+  startTimer() {
+    let intervalID = setInterval(this.countDown, 1000);
+    if (!this.state.resumeTimer) {
+      this.setState({
+        intervalID: intervalID,
+        currSeshMins: this.state.sessionLength,
+        currSeshSecs: 60,
+        currBreakMins: this.state.breakLength,
+        currBreakSecs: 60,
+        resumeTimer: true
+      });
+    } else {
+      this.setState({
+        intervalID: intervalID
+      });
+    }
+  }
+
+  stopTimer() {
+    clearInterval(this.state.intervalID);
   }
 
   resetClock() {
-    this.setState({ breakLength: 5, sessionLength: 25 });
+    this.stopTimer();
+    this.setState({
+      breakLength: 5,
+      sessionLength: 25,
+      running: false,
+      currSeshMins: 0,
+      currSeshSecs: 0,
+      currBreakMins: 0,
+      currBreakSecs: 0,
+      intervalID: 0,
+      resumeTimer: false,
+      onBreak: false
+    });
+    let beep = document.getElementById("beep");
+    beep.pause();
+    beep.currentTime = 0;
   }
 
   toggleTimer() {
-    this.setState({ running: !this.state.running });
+    if (this.state.running) {
+      this.stopTimer();
+      this.setState({ running: false });
+    } else {
+      this.startTimer();
+      this.setState({ running: true });
+    }
+  }
+
+  countDown() {
+    if (this.state.currSeshSecs > 0 && this.state.currSeshSecs <= 59) {
+      this.setState({ currSeshSecs: this.state.currSeshSecs - 1 });
+    } else {
+      if (this.state.currSeshMins > 0) {
+        this.setState({
+          currSeshMins: this.state.currSeshMins - 1,
+          currSeshSecs: 59
+        });
+      } else if (
+        this.state.currSeshMins === 0 &&
+        this.state.currSeshSecs === 0
+      ) {
+        this.stopTimer();
+        this.setState({ resumeTimer: false, onBreak: true });
+        this.startBreakTimer();
+        let beep = document.getElementById("beep");
+        beep.play();
+      }
+    }
+  }
+
+  startBreakTimer() {
+    let intervalID = setInterval(this.breakCountDown, 1000);
+    if (!this.state.resumeTimer) {
+      this.setState({
+        intervalID: intervalID,
+        currSeshMins: this.state.sessionLength,
+        currSeshSecs: 60,
+        currBreakMins: this.state.breakLength,
+        currBreakSecs: 60,
+        resumeTimer: true
+      });
+    } else {
+      this.setState({
+        intervalID: intervalID
+      });
+    }
+  }
+
+  breakCountDown() {
+    if (this.state.currBreakSecs > 0 && this.state.currBreakSecs <= 59) {
+      this.setState({ currBreakSecs: this.state.currBreakSecs - 1 });
+    } else {
+      if (this.state.currBreakMins > 0) {
+        this.setState({
+          currBreakMins: this.state.currSeshMins - 1,
+          currBreakSecs: 59
+        });
+      } else if (
+        this.state.currBreakMins === 0 &&
+        this.state.currBreakSecs === 0
+      ) {
+        this.stopTimer();
+        this.setState({ resumeTimer: false, onBreak: false });
+        this.startTimer();
+        let beep = document.getElementById("beep");
+        beep.play();
+      }
+    }
   }
 
   adjustLength(e) {
@@ -103,8 +215,32 @@ class PomodoroClock extends React.Component {
           </div>
         </span>
         <span id="session-countdown" className="row">
-          <p id="timer-label">Session</p>
-          <p id="time-left">{this.getStartTime()}</p>
+          <p id="timer-label">{this.state.onBreak ? "Break" : "Session"}</p>
+          <p id="time-left">
+            {this.state.onBreak
+              ? this.state.currBreakMins < 10
+                ? "0" + this.state.currBreakMins
+                : this.state.currBreakMins
+              : this.state.currSeshMins < 10
+              ? "0" + this.state.currSeshMins
+              : this.state.currSeshMins}
+            :
+            {this.state.onBreak
+              ? this.state.currBreakSecs === 60
+                ? "00"
+                : this.state.currBreakSecs < 10
+                ? "0" + this.state.currBreakSecs
+                : this.state.currBreakSecs
+              : this.state.currSeshSecs === 60
+              ? "00"
+              : this.state.currSeshSecs < 10
+              ? "0" + this.state.currSeshSecs
+              : this.state.currSeshSecs}
+          </p>
+          <audio
+            id="beep"
+            src="http://soundbible.com/grab.php?id=2142&type=mp3"
+          />
           <span className="row" id="start-reset-buttons">
             <button
               className="btn btn-default"
