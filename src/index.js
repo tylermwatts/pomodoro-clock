@@ -9,14 +9,24 @@ class PomodoroClock extends React.Component {
     this.state = {
       breakLength: 5,
       sessionLength: 25,
-      timeLeft: "00:00"
+      running: false
     };
+    this.getStartTime = this.getStartTime.bind(this);
     this.resetClock = this.resetClock.bind(this);
+    this.toggleTimer = this.toggleTimer.bind(this);
     this.adjustLength = this.adjustLength.bind(this);
   }
 
+  getStartTime() {
+    return this.state.sessionLength.toString() + ":00";
+  }
+
   resetClock() {
-    this.setState({ breakLength: 5, sessionLength: 25, timeLeft: "00:00" });
+    this.setState({ breakLength: 5, sessionLength: 25 });
+  }
+
+  toggleTimer() {
+    this.setState({ running: !this.state.running });
   }
 
   adjustLength(e) {
@@ -49,29 +59,69 @@ class PomodoroClock extends React.Component {
 
   render() {
     return (
-      <div>
-        <p id="break-label">Break Length</p>
-        <p id="break-length">{this.state.breakLength}</p>
-        <button id="break-decrement" onClick={e => this.adjustLength(e)}>
-          -
-        </button>
-        <button id="break-increment" onClick={e => this.adjustLength(e)}>
-          +
-        </button>
-        <p id="session-label">Session Length</p>
-        <p id="session-length">{this.state.sessionLength}</p>
-        <button id="session-decrement" onClick={e => this.adjustLength(e)}>
-          -
-        </button>
-        <button id="session-increment" onClick={e => this.adjustLength(e)}>
-          +
-        </button>
-        <p id="timer-label">Session</p>
-        <p id="time-left">{this.state.timeLeft}</p>
-        <button id="start_stop">start/stop</button>
-        <button id="reset" onClick={this.resetClock}>
-          Reset
-        </button>
+      <div id="main" className="container">
+        <span id="break-session-row" className="row">
+          <div id="break-display">
+            <p id="break-label">Break Length</p>
+            <p id="break-length">{this.state.breakLength}</p>
+            <span id="break-button-row" className="row">
+              <button
+                className="btn btn-default"
+                id="break-decrement"
+                onClick={e => this.adjustLength(e)}
+              >
+                -
+              </button>
+              <button
+                className="btn btn-default"
+                id="break-increment"
+                onClick={e => this.adjustLength(e)}
+              >
+                +
+              </button>
+            </span>
+          </div>
+          <div id="session-display">
+            <p id="session-label">Session Length</p>
+            <p id="session-length">{this.state.sessionLength}</p>
+            <span id="session-button-row" className="row">
+              <button
+                className="btn btn-default"
+                id="session-decrement"
+                onClick={e => this.adjustLength(e)}
+              >
+                -
+              </button>
+              <button
+                className="btn btn-default"
+                id="session-increment"
+                onClick={e => this.adjustLength(e)}
+              >
+                +
+              </button>
+            </span>
+          </div>
+        </span>
+        <span id="session-countdown" className="row">
+          <p id="timer-label">Session</p>
+          <p id="time-left">{this.getStartTime()}</p>
+          <span className="row" id="start-reset-buttons">
+            <button
+              className="btn btn-default"
+              id="start_stop"
+              onClick={this.toggleTimer}
+            >
+              {this.state.running ? "Stop" : "Start"}
+            </button>
+            <button
+              className="btn btn-default"
+              id="reset"
+              onClick={this.resetClock}
+            >
+              Reset
+            </button>
+          </span>
+        </span>
       </div>
     );
   }

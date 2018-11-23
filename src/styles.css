@@ -1,4 +1,43 @@
-.App {
-  font-family: sans-serif;
+#main {
+  font-size: 20px;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+}
+
+#break-display {
+  display: inline-block;
+  margin: 5px;
+  width: 50%;
   text-align: center;
+  border: 2px rgb(0, 195, 255) solid;
+  border-radius: 15px;
+}
+
+#session-display {
+  display: inline-block;
+  margin: 5px;
+  width: 50%;
+  text-align: center;
+  border: 2px rgb(0, 195, 255) solid;
+  border-radius: 15px;
+}
+
+#session-countdown {
+  display: block;
+  margin: auto;
+  width: 80%;
+  text-align: center;
+  border: 2px rgb(0, 195, 255) solid;
+  border-radius: 15px;
+}
+
+#start-reset-buttons {
+  display: block;
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  padding: 15px;
+}
+
+.btn {
+  width: 75px;
 }
