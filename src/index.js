@@ -125,7 +125,7 @@ class PomodoroClock extends React.Component {
     } else {
       if (this.state.currBreakMins > 0) {
         this.setState({
-          currBreakMins: this.state.currSeshMins - 1,
+          currBreakMins: this.state.currBreakMins - 1,
           currBreakSecs: 59
         });
       } else if (
@@ -181,6 +181,7 @@ class PomodoroClock extends React.Component {
             : "container break-time"
         }
       >
+        <h2 id="title">The Pomodoro Productivity Clock</h2>
         <span id="break-session-row" className="row">
           <div id="break-display">
             <p id="break-label">Break Length</p>
@@ -201,6 +202,13 @@ class PomodoroClock extends React.Component {
                 +
               </button>
             </span>
+          </div>
+          <div id="tomato-clock">
+            <img
+              alt="tomato clip art"
+              id="tomato-picture"
+              src="https://i.imgur.com/xU4giFi.png"
+            />
           </div>
           <div id="session-display">
             <p id="session-label">Session Length</p>

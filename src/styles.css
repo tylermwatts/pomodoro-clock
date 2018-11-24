@@ -1,8 +1,19 @@
 #main {
-  font-size: 20px;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-family: "Noto Sans", sans-serif;
   font: black;
   padding: 20px;
+}
+
+#title {
+  text-align: center;
+  padding: 10px;
+  margin: 30px;
+  border: 3px solid black;
+  border-radius: 15px;
+}
+
+.container {
+  background-color: rgb(219, 116, 233);
 }
 
 .break-time {
@@ -13,30 +24,54 @@
   background-color: rgb(94, 228, 105);
 }
 
-#break-display {
-  display: inline-block;
-  margin: 5px;
-  width: 50%;
+#break-session-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px;
+}
+
+#tomato-clock {
+  display: block;
   text-align: center;
-  border: 5px black solid;
+}
+
+#tomato-picture {
+  width: 200px;
+}
+
+#break-display {
+  font-size: 20px;
+  display: inline-block;
+  width: 200px;
+  text-align: center;
+  border: 3px black solid;
   border-radius: 15px;
+}
+
+#break-length {
+  font-size: 30px;
 }
 
 #session-display {
+  font-size: 20px;
   display: inline-block;
-  margin: 5px;
-  width: 50%;
+  width: 200px;
   text-align: center;
-  border: 5px black solid;
+  border: 3px black solid;
   border-radius: 15px;
 }
 
+#session-length {
+  font-size: 30px;
+}
+
 #session-countdown {
+  font-size: 30px;
   display: block;
   margin: auto;
-  width: 80%;
+  width: 420px;
   text-align: center;
-  border: 5px black solid;
+  border: 3px black solid;
   border-radius: 15px;
 }
 
@@ -49,5 +84,9 @@
 }
 
 .btn {
+  margin: 2px;
+  padding: 2px;
+  font-size: 20px;
+  height: 30px;
   width: 75px;
 }
